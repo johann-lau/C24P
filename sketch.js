@@ -1,30 +1,34 @@
 const Engine = Matter.Engine;
 const World = Matter.World;
 const Bodies = Matter.Bodies;
+const Body = Matter.Body;
 const Constraint = Matter.Constraint;
 
 var engine, world;
 var canvas;
 
 function preload() {
-	b1 = loadImage('assets/base1.png');
-	b2 = loadImage('assets/base2.png');
-	p = loadImage('assets/player.png');
+  b1 = loadImage('assets/base1.png');
+  b2 = loadImage('assets/base2.png');
+  p = loadImage('assets/player.png');
+  cbow = loadImage('assets/computerArcher.png');
+  pbow = loadImage('assets/playerArcher.png');
+  arrow = loadImage('assets/arrow.png')
 }
 
 function setup() {
   canvas = createCanvas(600, 600);
-  
+
   //Initialising Engine
   engine = Engine.create();
   world = engine.world;
-	
+
   //Create Player Base and Computer Base Object
-	CB = new CBase(10,450);
-	CP = new CPlayer(15, 0);
-	PP = new PPlayer(455, 0);
-	PB = new PBase(450,450);
- }
+  CB = new CBase(10, 450);
+  CP = new CPlayer(50, 100);
+  PP = new PPlayer(450, 100);
+  PB = new PBase(410, 450);
+}
 
 function draw() {
 
@@ -38,11 +42,28 @@ function draw() {
   textSize(40);
   text("EPIC ARCHERY", width / 2, 100);
 
-  //Display Playerbase and computer base 
-	CB.show()
-	CP.show()
-  //display Player and computerplayer
-	PB.show()
-	PP.show()
+  CB.show()
+  CP.show()
+  PB.show()
+  PP.show()
 
+  text(mouseX+","+mouseY, mouseX, mouseY)
+}
+
+function keyPressed() {
+  if (keyCode == LEFT_ARROW && PP.angle < 0.5) {
+    Matter.Body.setAngle(PP.body, PP.angle + 0.1)
+    Matter.Body.setAngle(PP.arrow, PP.angle - 0.1)
+    PP.angle = PP.angle + 0.1
+  }
+
+  if (keyCode == RIGHT_ARROW && PP.angle > -0.5) {
+    Matter.Body.setAngle(PP.body, PP.angle - 0.1)
+    Matter.Body.setAngle(PP.arrow, PP.angle - 0.1)
+    PP.angle = PP.angle - 0.1
+  }
+
+  if (keyCode == DOWN_ARROW) {
+    PP.shoot()
+  }
 }
